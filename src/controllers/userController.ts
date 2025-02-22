@@ -1,27 +1,28 @@
 import { Request, Response, NextFunction } from "express";
 import * as UserService from "../services/userService";
 
-export const getAllUsers = async (req: Request, res: Response) : Promise<Response> => {
+export const getAllUsers = async (req: Request, res: Response) => {
     try {
         const users = await UserService.allUsers();
         if(!users) {
-            return res.json({
+             res.json({
                 status: 404,
+                message: "User not found",
                 data: null,
-                message: "User not found"
             })
         }
 
-        return res.json({
+         res.json({
             status: 200,
+            message: "Get ALl users successfully",
             data: users,
-            message: "Get ALl users successfully"
         })
         
     } catch (error) {
         console.log(error);
-        return res.json({
+        res.json({
             status: 500,
+            data : null,
             message: "Internal server error",
         })
         
@@ -34,22 +35,43 @@ export const getUserById = async (req: Request, res: Response) => {
         const user = await UserService.getUserById(id);
     
         if(!user) {
-            res.status(404).json({
-                data : null,
-                message: "User not found"
+            res.json({
+                status: 404,
+                message: "User not found",
+                data: null,
             })
         }
     
         res.json({
             status: 200,
+            message: "Get user by id successfully",
             data: user,
-            message: "Get user by id successfully"
         })
     } catch (error) {
         console.log(error);
         res.status(500).json({
             status: 500,
             message: "Internal server error",
+            data: null
+        })
+    }
+};
+
+export const getUserByEmail = async (req: Request, res: Response) => {
+    try {
+        const email = req.params.email;
+        const user = await UserService.getUserByEmail(email);
+        res.json({
+            status: 200,
+            message: "Get user by email successfully",
+            data: user,
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status: 500,
+            message: "Internal server error",
+            data: null
         })
     }
 };
@@ -60,14 +82,15 @@ export const createUser = async (req: Request, res: Response) => {
         const user = await UserService.createUser(name, email, password);
         res.json({
             status: 200,
+            message: "Create user successfully",
             data: user,
-            message: "Create user successfully"
         })
     } catch (error) {
         console.log(error);
         res.status(500).json({
             status: 500,
             message: "Internal server error",
+            data : null
         })
     }
 };
@@ -79,14 +102,15 @@ export const updateUser = async (req: Request, res: Response) => {
         const user = await UserService.updateUser(id, name, email, password);
         res.json({
             status: 200,
+            message: "Update user successfully",
             data: user,
-            message: "Update user successfully"
         })
     } catch (error) {
         console.log(error);
         res.status(500).json({
             status: 500,
             message: "Internal server error",
+            data: null
         })
     }
 };
@@ -97,14 +121,15 @@ export const deleteUser = async (req: Request, res: Response) => {
         const user = await UserService.deleteUser(id);
         res.json({
             status: 200,
+            message: "Delete user successfully",
             data: user,
-            message: "Delete user successfully"
         })
     } catch (error) {
         console.log(error);
         res.status(500).json({
             status: 500,
             message: "Internal server error",
+            data: null
         })
     }
 };

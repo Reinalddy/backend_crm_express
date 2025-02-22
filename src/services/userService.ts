@@ -8,6 +8,10 @@ export const getUserById = async (id: number) => {
     return await UserModel.getUserById(id);
 }
 
+export const getUserByEmail = async (email: string) => {
+    return await UserModel.getUserByEmail(email);
+}
+
 export const createUser = async (name: string, email: string, password: string) => {
     return await UserModel.createUser(name, email, password);
 }
