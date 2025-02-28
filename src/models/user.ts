@@ -1,5 +1,6 @@
 import exp from "constants";
 import prisma from "../config/database";
+import { generateRandomString } from "../helpers/helpers";
 
 export const allUsers = async () => {
     return await prisma.user.findMany({
@@ -37,12 +38,27 @@ export const getUserByEmail = async (email: string) => {
     });
 }
 
+export const getUserBytoken = async (token: string) => {
+    return await prisma.user.findUnique({
+        where: {
+            token: token
+        },
+        select : {
+            id: true,
+            name:true,
+            token:true
+        }
+    });
+}
+
 export const createUser = async (name: string, email: string, password: string) => {
+    const token = generateRandomString(10);
     return await prisma.user.create({
         data: {
             name: name,
             email: email,
-            password: password
+            password: password,
+            token: token
         }
     });
 };
